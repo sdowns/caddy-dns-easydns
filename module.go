@@ -1,8 +1,6 @@
 package easydns
 
 import (
-	"fmt"
-
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	easydns "github.com/libdns/easydns"
@@ -26,8 +24,7 @@ func (Provider) CaddyModule() caddy.ModuleInfo {
 // TODO: This is just an example. Useful to allow env variable placeholders; update accordingly.
 // Provision sets up the module. Implements caddy.Provisioner.
 func (p *Provider) Provision(ctx caddy.Context) error {
-	p.Provider.APIToken = caddy.NewReplacer().ReplaceAll(p.Provider.APIToken, "")
-	return fmt.Errorf("TODO: not implemented")
+	return nil
 }
 
 // TODO: This is just an example. Update accordingly.
@@ -41,7 +38,7 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	for d.Next() {
 		if d.NextArg() {
-			p.Provider.APIToken = d.Val()
+			// p.Provider.APIToken = d.Val()
 		}
 		if d.NextArg() {
 			return d.ArgErr()
@@ -60,7 +57,7 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				}
 			case "api_key":
 				if p.Provider.APIKey != "" {
-					return d.Err("API token already set")
+					return d.Err("API key already set")
 				}
 				if d.NextArg() {
 					p.Provider.APIKey = d.Val()
@@ -70,7 +67,7 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				}
 			case "api_url":
 				if p.Provider.APIUrl != "" {
-					return d.Err("API token already set")
+					return d.Err("API url already set")
 				}
 				if d.NextArg() {
 					p.Provider.APIUrl = d.Val()
