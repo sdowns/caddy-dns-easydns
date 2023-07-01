@@ -1,6 +1,8 @@
 package easydns
 
 import (
+	"os"
+
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	easydns "github.com/libdns/easydns"
@@ -21,9 +23,23 @@ func (Provider) CaddyModule() caddy.ModuleInfo {
 	}
 }
 
-// TODO: This is just an example. Useful to allow env variable placeholders; update accordingly.
 // Provision sets up the module. Implements caddy.Provisioner.
 func (p *Provider) Provision(ctx caddy.Context) error {
+	repl := caddy.NewReplacer()
+
+	// get token value from env variable
+	token := os.Getenv("CADDY_EASYDNS_TOKEN")
+	key := os.Getenv("CADDY_EASYDNS_KEY")
+	url := os.Getenv("CADDY_EASYDNS_URL")
+	if url == "" {
+		// Use production URL for the EasyDNS API by default.
+		// The testing URL is: https://sandbox.rest.easydns.net
+		url = "https://rest.easydns.net"
+	}
+
+	p.Provider.APIToken = repl.ReplaceAll(p.Provider.APIToken, token)
+	p.Provider.APIKey = repl.ReplaceAll(p.Provider.APIKey, key)
+	p.Provider.APIUrl = repl.ReplaceAll(p.Provider.APIUrl, url)
 	return nil
 }
 
@@ -37,12 +53,12 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 // **THIS IS JUST AN EXAMPLE AND NEEDS TO BE CUSTOMIZED.**
 func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	for d.Next() {
-		if d.NextArg() {
-			// p.Provider.APIToken = d.Val()
-		}
-		if d.NextArg() {
-			return d.ArgErr()
-		}
+		// if d.NextArg() {
+		// 	// p.Provider.APIToken = d.Val()
+		// }
+		// if d.NextArg() {
+		// 	return d.ArgErr()
+		// }
 		for nesting := d.Nesting(); d.NextBlock(nesting); {
 			switch d.Val() {
 			case "api_token":
