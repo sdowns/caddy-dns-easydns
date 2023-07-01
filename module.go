@@ -5,7 +5,7 @@ import (
 
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
-	easydns "github.com/sdowns/libdns-easydns"
+	easydns "github.com/libdns/easydns"
 )
 
 // Provider lets Caddy read and manipulate DNS records hosted by this DNS provider.

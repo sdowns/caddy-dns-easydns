@@ -1,11 +1,10 @@
-// module github.com/caddy-dns/easydns
-module github.com/sdowns/caddy-dns-easydns
+module github.com/caddy-dns/easydns
 
 go 1.20
 
 require (
 	github.com/caddyserver/caddy/v2 v2.6.4
-	github.com/sdowns/libdns-easydns v0.0.0-20230626040848-9829b61db915
+	github.com/libdns/easydns v0.1.0
 )
 
 require (
