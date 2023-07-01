@@ -52,18 +52,3 @@ tls {
 	}
 }
 ```
-
-Alternatively, the token and key can be specified in environment variables and the URL can also be overridden via the environment
-- CADDY_EASYDNS_TOKEN
-- CADDY_EASYDNS_KEY
-- CADDY_EASYDNS_URL
-
-If you only want to use the environment overrides, then the caddy file might look similar to:
-
-```
-# globally
-{
-	acme_dns easydns
-}
-```
-

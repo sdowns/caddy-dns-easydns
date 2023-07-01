@@ -1,8 +1,6 @@
 package easydns
 
 import (
-	"os"
-
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	easydns "github.com/libdns/easydns"
@@ -27,38 +25,23 @@ func (Provider) CaddyModule() caddy.ModuleInfo {
 func (p *Provider) Provision(ctx caddy.Context) error {
 	repl := caddy.NewReplacer()
 
-	// get token value from env variable
-	token := os.Getenv("CADDY_EASYDNS_TOKEN")
-	key := os.Getenv("CADDY_EASYDNS_KEY")
-	url := os.Getenv("CADDY_EASYDNS_URL")
-	if url == "" {
-		// Use production URL for the EasyDNS API by default.
-		// The testing URL is: https://sandbox.rest.easydns.net
-		url = "https://rest.easydns.net"
-	}
-
-	p.Provider.APIToken = repl.ReplaceAll(p.Provider.APIToken, token)
-	p.Provider.APIKey = repl.ReplaceAll(p.Provider.APIKey, key)
-	p.Provider.APIUrl = repl.ReplaceAll(p.Provider.APIUrl, url)
+	p.Provider.APIToken = repl.ReplaceAll(p.Provider.APIToken, "")
+	p.Provider.APIKey = repl.ReplaceAll(p.Provider.APIKey, "")
+	// Use production URL for the EasyDNS API by default.
+	// The testing URL is: https://sandbox.rest.easydns.net
+	p.Provider.APIUrl = repl.ReplaceAll(p.Provider.APIUrl, "https://rest.easydns.net")
 	return nil
 }
 
-// TODO: This is just an example. Update accordingly.
 // UnmarshalCaddyfile sets up the DNS provider from Caddyfile tokens. Syntax:
 //
-//	providername [<api_token>] {
-//	    api_token <api_token>
+//	providername {
+//	    api_token <easydns_api_token>
+//		api_key <easydns_api_key>
+//		api_url <easydns_api_url>     # optional, defaults to https://rest.easydns.net
 //	}
-//
-// **THIS IS JUST AN EXAMPLE AND NEEDS TO BE CUSTOMIZED.**
 func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	for d.Next() {
-		// if d.NextArg() {
-		// 	// p.Provider.APIToken = d.Val()
-		// }
-		// if d.NextArg() {
-		// 	return d.ArgErr()
-		// }
 		for nesting := d.Nesting(); d.NextBlock(nesting); {
 			switch d.Val() {
 			case "api_token":
